@@ -1,8 +1,19 @@
+import type { NextPage } from 'next'
+import { useCallback, useState } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import Button from '@mui/material/Button';
 
-export default function Home() {
+const Home: NextPage = () => {
+  const [greeting, setGreeting] = useState<string|undefined>();
+  const clickCallback = useCallback(
+    () => {
+      fetch('/api/hello').then((res) => res.json()).then((a) => setGreeting(`Hello ${a.name}`));
+    },
+    [],
+  );
+
   return (
     <div className={styles.container}>
       <Head>
@@ -20,6 +31,8 @@ export default function Home() {
           Get started by editing{' '}
           <code className={styles.code}>pages/index.js</code>
         </p>
+
+        <Button variant="contained" onClick={clickCallback}>{greeting || 'Click me'}</Button>
 
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
@@ -67,3 +80,4 @@ export default function Home() {
     </div>
   )
 }
+export default Home
